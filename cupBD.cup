@@ -1,0 +1,130 @@
+import java.io.*;
+import java.util.Stack;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java_cup.runtime.*;
+import java_cup.*;
+
+
+parser code {:
+
+	//método main para analizar 
+	public static void main (String argv[]) throws Exception
+	{
+		try {
+			//declaración del parser
+			parser analizador;
+
+			if(argv[0].equals("-i"))
+			{
+				analizador = new parser(new lexBD(System.in));
+			}
+			else
+			{
+				FileInputStream archivo = new FileInputStream(argv[0]);
+				validarFormato(argv[0]);
+				analizador = new parser(new lexBD(archivo));
+			}
+			
+			analizador.parse();
+
+		}
+        catch (Exception e){System.err.println("Error: " + e.getMessage());}
+	}
+
+	public void syntax_error(Symbol cur_token){
+		report_error("Syntax error", cur_token);
+	}
+
+	public static String validarFormato(String archivo) throws IOException
+	{
+		if(archivo.length()>=4){
+			if(archivo.substring(archivo.length()-3,archivo.length()).equals(".bd")){
+				return archivo;
+			}else{
+				throw new IOException("Formato de archivo no adecuado");
+			}
+		}else{
+			throw new IOException("La longitud del archivo no puede ser tan corta.");
+		}
+	}
+
+	public void report_error (String message, Object info) {
+		System.err.print(message);
+			if (info instanceof Symbol)
+				if (((Symbol)info).left != -1){
+				    java_cup.runtime.Symbol symb=((java_cup.runtime.Symbol)info);
+					System.err.println(" at line " + (symb.right + 1) + ", token:  " + symb.value + "\n");
+				}
+	}
+
+
+
+:};
+
+// terminales y no terminales
+
+
+
+
+terminal COMIENZO,FIN,TABLA,DATOS,REGISTRO,MENOR,MAYOR,DOSPUNTOS,BARRA,COMILLAS,CAMPO,_TIPO,VALOR,NUMERO,OF,CAMPOS,DESCRIPCION,_NECESARIO,BASEDEDATOS,SUMA,RESTA, _CADENA,_FECHA,_ENTERO,_COMAFLOTANTE,_NOMBRE, NOMBRE,NATURAL,ENTERO,COMAFLOTANTE,CADENA,FECHA;
+terminal NECESARIO;
+terminal TIPO;
+non terminal abrirBD, cerrarBD, abrirtabla, cerrartabla, abrirdatos, cerrardatos, todo, todos, tabla, nombre, numero_de_campos, abreCampos, cierraCampos;
+non terminal registros, tipo, necesario, registro;
+
+todo ::= abrirBD abrirtabla tabla cerrartabla abrirdatos cerrardatos cerrarBD {:
+			System.out.println("Esa penita por ahi");
+:} | error;
+
+
+tabla ::= nombre numero_de_campos registros{:
+	:};
+
+registros ::= registros registro{:
+
+	:} | registro;
+
+
+registro ::= abreCampos  nombre tipo necesario cierraCampos {::};
+
+
+
+
+
+abreCampos ::= MENOR CAMPO DESCRIPCION MAYOR {::};
+cierraCampos ::= MENOR BARRA CAMPO DESCRIPCION MAYOR {::};
+tipo ::= MENOR _TIPO DOSPUNTOS TIPO MAYOR {::};
+necesario ::= MENOR _NECESARIO DOSPUNTOS NECESARIO MAYOR {::};
+
+numero_de_campos ::= MENOR NUMERO OF CAMPOS DOSPUNTOS NATURAL MAYOR {:
+	:};
+
+nombre ::= MENOR _NOMBRE DOSPUNTOS NOMBRE MAYOR {:
+	System.out.println("Esa penita por ahi");
+	:} | error;
+
+abrirtabla ::= MENOR COMIENZO TABLA MAYOR {:
+		
+	:} | error;
+
+cerrartabla ::= MENOR FIN TABLA MAYOR {:
+		
+	:} | error;
+
+abrirBD ::= MENOR COMIENZO BASEDEDATOS MAYOR {:
+	:} | error;
+
+cerrarBD ::= MENOR FIN BASEDEDATOS MAYOR{:
+	:} | error;
+
+
+abrirdatos ::= MENOR COMIENZO DATOS MAYOR {:
+
+	:} | error;
+
+cerrardatos ::= MENOR FIN DATOS MAYOR {:
+
+	:} | error;
+

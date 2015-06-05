@@ -1,0 +1,15 @@
+<start database>
+	<start table>
+		<name: Persona>
+		<number of fields: 3>
+		<field description>
+			<name: Campo-1>
+			<type: string>
+			<required: true>
+		</field description >
+	<end table>
+
+	<start data>
+	<end data>
+<end database>
+
