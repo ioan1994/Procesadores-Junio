@@ -8,7 +8,7 @@ init:
 all:
 	cup cupBD.cup
 	jlex lexBD.lex
-	javac sym.java parser.java lexBD.lex.java
+	javac sym.java parser.java lexBD.lex.java Campo.java Registro.java
 run:
 	java -classpath $(CLASSPATH) parser
 

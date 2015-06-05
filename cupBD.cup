@@ -3,11 +3,14 @@ import java.util.Stack;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.text.ParseException;
 import java_cup.runtime.*;
 import java_cup.*;
 
 
+
 parser code {:
+
 
 	//método main para analizar 
 	public static void main (String argv[]) throws Exception
@@ -68,52 +71,121 @@ parser code {:
 
 
 
-terminal ABRIRCAMPO, BASEDEDATOS;
-terminal CERRARCAMPO, ABRIRNOMBRE, ABRIRNUMERODECAMPOS, ABRIRTIPO, ABRIRNECESARIO, ABRIRNOMBRETABLA, CERRAR, TIPO, FECHA, COMAFLOTANTE, NATURAL, NOMBRE,DESCRIPCION, DATOS ,NECESARIO, ABRIRVALOR;
-
-terminal START, AFIELD, END, CFIELD, TABLA, REGISTRO, CADENA, ENTERO;
-
-
-non terminal todo, tabla, nombre, numero_de_campos, opcionalRegistro, registros;
-non terminal descregistros, tipo, datos, necesario, valor, campos, campo;
+terminal ABRIRCAMPO, BASEDEDATOS,CERRARCAMPO, ABRIRNOMBRE, ABRIRNUMERODECAMPOS;
+terminal ABRIRTIPO, ABRIRNECESARIO, ABRIRNOMBRETABLA, CERRAR ,DESCRIPCION, END;
+terminal START, AFIELD, CFIELD, DATOS, TABLA, REGISTRO, ABRIRVALOR;
 
 
+terminal String TIPO, CADENA, NOMBRE, FECHA;
+terminal float COMAFLOTANTE;
+terminal int NATURAL, ENTERO;
+terminal Boolean NECESARIO;
 
-todo ::= START BASEDEDATOS CERRAR tabla datos END BASEDEDATOS CERRAR{:
-			System.out.println("Esa penita por ahi");
+non terminal todo;
+non terminal Object valor;
+non terminal Stack  campos, datos, registros, descampos;
+non terminal Campo campo;
+non terminal Integer numero_de_campos;
+non terminal Boolean necesario;
+non terminal String tipo, nombre;
+non terminal Campo opcionalRegistro;
+non terminal Descripcion tabla;
+
+todo ::= START BASEDEDATOS CERRAR tabla:tab datos:dat END BASEDEDATOS CERRAR{:
+				System.out.println(tab.getNombreTabla());
 			:} | error;
 
 
-tabla ::= START TABLA CERRAR nombre numero_de_campos descregistros END TABLA CERRAR {:
+tabla ::= START TABLA CERRAR nombre:nom numero_de_campos:numdc descampos:campos END TABLA CERRAR {:
+				Descripcion descr = new Descripcion(nom, numdc, campos);
+				descr.comprobarNumeroDeCampos();
+				RESULT = descr;
 			:};
 
 
-descregistros ::= descregistros AFIELD DESCRIPCION CERRAR nombre opcionalRegistro CFIELD DESCRIPCION CERRAR {:
-			:} | AFIELD DESCRIPCION CERRAR nombre opcionalRegistro CFIELD DESCRIPCION CERRAR{::};
+descampos ::= descampos:resto AFIELD DESCRIPCION CERRAR nombre:nom opcionalRegistro:op CFIELD DESCRIPCION CERRAR {:
+				op.setNombre(nom);
+				resto.push(op);
+				RESULT = resto;
+			:} | AFIELD DESCRIPCION CERRAR nombre:nom opcionalRegistro:op CFIELD DESCRIPCION CERRAR{:
+				op.setNombre(nom);
+				Stack<Campo> stack = new Stack<Campo>();
+				stack.push(op);
+				RESULT = stack;
+			:};
 
-opcionalRegistro::= tipo necesario {::} | tipo {::} | necesario tipo;
+opcionalRegistro::= tipo:t necesario:n {:
+				Campo campo = new Campo();
+				campo.setTipo(t);
+				campo.setNecesario(n);
+				RESULT = campo;
+			:} | tipo:t {:
+				Campo campo = new Campo();
+				campo.setTipo(t);
+				campo.setNecesario(false);
+				RESULT = campo;
+			:} | necesario:n tipo:t {:
+				Campo campo = new Campo();
+				campo.setTipo(t);
+				campo.setNecesario(n);
+				RESULT = campo;
+			:};
 
 nombre ::= ABRIRNOMBRE NOMBRE:n CERRAR {:
-			System.out.println(n);
+				RESULT = n;
 			:};
 
-tipo ::= ABRIRTIPO TIPO CERRAR {::};
+tipo ::= ABRIRTIPO TIPO:t CERRAR {:
+				RESULT = t;
+			:};
 
-necesario ::= ABRIRNECESARIO NECESARIO CERRAR;
+necesario ::= ABRIRNECESARIO NECESARIO:n CERRAR {:
+				RESULT = n;
+			:};
 
-numero_de_campos ::= ABRIRNUMERODECAMPOS NATURAL CERRAR {:
+numero_de_campos ::= ABRIRNUMERODECAMPOS NATURAL:num CERRAR {:
+				RESULT = num;
 			:};
 
 //-----------------------------------------------------------------------------------------------//
-datos ::=| START DATOS CERRAR registros END DATOS CERRAR {:
+datos ::=| START DATOS CERRAR registros:reg END DATOS CERRAR {:
+					RESULT = reg;
 			:};
 
-registros ::= registros START REGISTRO CERRAR ABRIRNOMBRETABLA NOMBRE CERRAR campos END REGISTRO CERRAR {::} 
-			| START REGISTRO CERRAR ABRIRNOMBRETABLA NOMBRE CERRAR campos END REGISTRO CERRAR ;
+registros ::= registros:resto START REGISTRO CERRAR ABRIRNOMBRETABLA NOMBRE CERRAR campos:cabeza END REGISTRO CERRAR {:
+					resto.push(cabeza);
+					RESULT = resto;
+			:}| START REGISTRO CERRAR ABRIRNOMBRETABLA NOMBRE:nom CERRAR campos:c END REGISTRO CERRAR {:
+					Stack<Registro> stack = new Stack <Registro>();
+					Registro r = new Registro(nom,c);
+					stack.push(r);
+					RESULT = stack;
+			:};
 
-campos ::= campos ABRIRCAMPO campo CERRARCAMPO {::}
-			| ABRIRCAMPO campo CERRARCAMPO {::};
+campos ::= campos:resto ABRIRCAMPO campo:cabeza CERRARCAMPO {:
+					resto.push(cabeza);
+					RESULT = resto;
+			:}| ABRIRCAMPO campo:c CERRARCAMPO   {:
+					Stack<Campo> stack = new Stack <Campo>();
+					stack.push(c);
+					RESULT = stack;
+			:};
 
-campo ::= ABRIRNOMBRE NOMBRE CERRAR ABRIRVALOR valor CERRAR {::};
+campo ::= ABRIRNOMBRE NOMBRE:nom CERRAR ABRIRVALOR valor:val CERRAR {:
+			Campo c = new Campo();
+			c.setNombre(nom);
+			c.setValor(val);
+			RESULT = c;
+		:};
 
-valor ::= COMAFLOTANTE |  NATURAL | ENTERO  | CADENA  | FECHA ;
+valor ::= COMAFLOTANTE:v {:
+				RESULT = v;
+		:} | NATURAL:v   {:
+				RESULT = v;
+		:} | ENTERO:v 	 {:
+				RESULT = v;
+		:} | CADENA:v 	 {:
+				RESULT = v;
+		:} | FECHA:v 	 {:	
+				RESULT = v;
+		:};

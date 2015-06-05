@@ -2,7 +2,15 @@
 
 	<start table>
 		<name: Persona>
-		<number of fields: 3>
+		<number of fields: 1>
+		<field description>
+			<name: Camasdasdasdpo-1>
+			<type: date>
+		</field description>
+		<field description>
+			<name: Camasdasdasdpo-1>
+			<type: date>
+		</field description>
 		<field description>
 			<name: Camasdasdasdpo-1>
 			<type: date>

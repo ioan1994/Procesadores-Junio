@@ -122,9 +122,9 @@ abrirNombreTabla="<table name:"
 
 {tipo} {return new Symbol(sym.TIPO,yyline,yyline,yytext());}
 {fecha} {return new Symbol(sym.FECHA,yyline,yyline,yytext());}
-{natural} {return new Symbol(sym.NATURAL,yyline,yyline,yytext());}
-{comaflotante} {return new Symbol(sym.COMAFLOTANTE,yyline,yyline,yytext());}
-{entero} {return new Symbol(sym.ENTERO,yyline,yyline,yytext());}
+{natural} {return new Symbol(sym.NATURAL,yyline,yyline,Integer.parseInt(yytext()));}
+{comaflotante} {return new Symbol(sym.COMAFLOTANTE,yyline,yyline,Float.parseFloat(yytext()));}
+{entero} {return new Symbol(sym.ENTERO,yyline,yyline,Integer.parseInt(yytext()));}
 {cadena} {return new Symbol(sym.CADENA,yyline,yyline,yytext());}
 
 {nombre} {
