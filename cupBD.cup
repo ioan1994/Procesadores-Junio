@@ -68,63 +68,52 @@ parser code {:
 
 
 
-terminal COMIENZO,FIN,TABLA,DATOS,REGISTRO,MENOR,MAYOR,DOSPUNTOS,BARRA,COMILLAS,CAMPO,_TIPO,VALOR,NUMERO,OF,CAMPOS,DESCRIPCION,_NECESARIO,BASEDEDATOS,SUMA,RESTA, _CADENA,_FECHA,_ENTERO,_COMAFLOTANTE,_NOMBRE, NOMBRE,NATURAL,ENTERO,COMAFLOTANTE,CADENA,FECHA;
-terminal NECESARIO;
-terminal TIPO;
-non terminal abrirBD, cerrarBD, abrirtabla, cerrartabla, abrirdatos, cerrardatos, todo, todos, tabla, nombre, numero_de_campos, abreCampos, cierraCampos;
-non terminal registros, tipo, necesario, registro;
+terminal ABRIRCAMPO, BASEDEDATOS;
+terminal CERRARCAMPO, ABRIRNOMBRE, ABRIRNUMERODECAMPOS, ABRIRTIPO, ABRIRNECESARIO, ABRIRNOMBRETABLA, CERRAR, TIPO, FECHA, COMAFLOTANTE, NATURAL, NOMBRE,DESCRIPCION, DATOS ,NECESARIO, ABRIRVALOR;
 
-todo ::= abrirBD abrirtabla tabla cerrartabla abrirdatos cerrardatos cerrarBD {:
+terminal START, AFIELD, END, CFIELD, TABLA, REGISTRO, CADENA, ENTERO;
+
+
+non terminal todo, tabla, nombre, numero_de_campos, opcionalRegistro, registros;
+non terminal descregistros, tipo, datos, necesario, valor, campos, campo;
+
+
+
+todo ::= START BASEDEDATOS CERRAR tabla datos END BASEDEDATOS CERRAR{:
 			System.out.println("Esa penita por ahi");
-:} | error;
+			:} | error;
 
 
-tabla ::= nombre numero_de_campos registros{:
-	:};
-
-registros ::= registros registro{:
-
-	:} | registro;
+tabla ::= START TABLA CERRAR nombre numero_de_campos descregistros END TABLA CERRAR {:
+			:};
 
 
-registro ::= abreCampos  nombre tipo necesario cierraCampos {::};
+descregistros ::= descregistros AFIELD DESCRIPCION CERRAR nombre opcionalRegistro CFIELD DESCRIPCION CERRAR {:
+			:} | AFIELD DESCRIPCION CERRAR nombre opcionalRegistro CFIELD DESCRIPCION CERRAR{::};
 
+opcionalRegistro::= tipo necesario {::} | tipo {::} | necesario tipo;
 
+nombre ::= ABRIRNOMBRE NOMBRE:n CERRAR {:
+			System.out.println(n);
+			:};
 
+tipo ::= ABRIRTIPO TIPO CERRAR {::};
 
+necesario ::= ABRIRNECESARIO NECESARIO CERRAR;
 
-abreCampos ::= MENOR CAMPO DESCRIPCION MAYOR {::};
-cierraCampos ::= MENOR BARRA CAMPO DESCRIPCION MAYOR {::};
-tipo ::= MENOR _TIPO DOSPUNTOS TIPO MAYOR {::};
-necesario ::= MENOR _NECESARIO DOSPUNTOS NECESARIO MAYOR {::};
+numero_de_campos ::= ABRIRNUMERODECAMPOS NATURAL CERRAR {:
+			:};
 
-numero_de_campos ::= MENOR NUMERO OF CAMPOS DOSPUNTOS NATURAL MAYOR {:
-	:};
+//-----------------------------------------------------------------------------------------------//
+datos ::=| START DATOS CERRAR registros END DATOS CERRAR {:
+			:};
 
-nombre ::= MENOR _NOMBRE DOSPUNTOS NOMBRE MAYOR {:
-	System.out.println("Esa penita por ahi");
-	:} | error;
+registros ::= registros START REGISTRO CERRAR ABRIRNOMBRETABLA NOMBRE CERRAR campos END REGISTRO CERRAR {::} 
+			| START REGISTRO CERRAR ABRIRNOMBRETABLA NOMBRE CERRAR campos END REGISTRO CERRAR ;
 
-abrirtabla ::= MENOR COMIENZO TABLA MAYOR {:
-		
-	:} | error;
+campos ::= campos ABRIRCAMPO campo CERRARCAMPO {::}
+			| ABRIRCAMPO campo CERRARCAMPO {::};
 
-cerrartabla ::= MENOR FIN TABLA MAYOR {:
-		
-	:} | error;
+campo ::= ABRIRNOMBRE NOMBRE CERRAR ABRIRVALOR valor CERRAR {::};
 
-abrirBD ::= MENOR COMIENZO BASEDEDATOS MAYOR {:
-	:} | error;
-
-cerrarBD ::= MENOR FIN BASEDEDATOS MAYOR{:
-	:} | error;
-
-
-abrirdatos ::= MENOR COMIENZO DATOS MAYOR {:
-
-	:} | error;
-
-cerrardatos ::= MENOR FIN DATOS MAYOR {:
-
-	:} | error;
-
+valor ::= COMAFLOTANTE |  NATURAL | ENTERO  | CADENA  | FECHA ;

@@ -1,15 +1,21 @@
 <start database>
+
 	<start table>
 		<name: Persona>
 		<number of fields: 3>
 		<field description>
-			<name: Campo-1>
-			<type: string>
-			<required: true>
-		</field description >
+			<name: Camasdasdasdpo-1>
+			<type: date>
+		</field description>
 	<end table>
 
 	<start data>
+		<start register>
+		<table name: Persona>
+			<field>
+				<name: Campo-1>
+				<value: +3>
+			</field>	
+		<end register>
 	<end data>
 <end database>
-

@@ -20,44 +20,55 @@ private void prueba(String linea){
 }
 %}
 
-
-comienzo="start"
-fin="end"
 tabla="table"
 datos="data"
 registro="register"
-menor="<"
-mayor=">"
-dospuntos=":"
-barra="/"
+cerrar=">"
 comillas="\""
-campo="field"
 valor="value"
 numero="number"
-of="of"
+de="of"
 campos="fields" 
 descripcion="description"
 basededatos="database"
-suma="+"
-resta="-"
+true="true"
+false="false"
 
-_necesario="required"
-_tipo="type" 
-_cadena="string"
-_fecha="date"
-_entero="integer"
-_comaflotante="float"
-_nombre="name"
 
 necesario=("true"|"false")
-tipo = ("integer"|"float"|"string"|"date")
 
+_nombre="name"
+
+tipo=("integer"|"float"|"string"|"date")
 nombre=([A-Z][A-Za-z0-9]*|[A-Z][A-Za-z0-9]*[-]|[A-Z][A-Za-z0-9]*[-][A-Za-z0-9]*)
-natural=[0-9]+
-entero=[+-]?{natural}
 comaflotante={entero}[.]{natural}
+entero=[-+]?{natural}
+natural=[0-9]+
 cadena={comillas}[^\n\"]+{comillas}
 fecha={natural}{natural}/{natural}{natural}/{natural}{natural}
+
+
+start="<start"
+end="<end"
+
+aField="<field"
+cField="</field"
+
+
+aRegistro="<start"
+cRegistro="<end"
+
+abrirCampo="<field>"
+cerrarCampo="</field>"
+
+abrirNombre="<name:"
+abrirValor="<value:"
+abrirNumeroDeCampos="<number of fields:"
+abrirTipo="<type:"
+abrirNecesario="<required:"
+
+abrirNombreTabla="<table name:"
+
 
 
 
@@ -74,36 +85,48 @@ fecha={natural}{natural}/{natural}{natural}/{natural}{natural}
 %%
 
 
-{comienzo} {return new Symbol(sym.COMIENZO,yyline,yyline,yytext());}
-{fin} {return new Symbol(sym.FIN,yyline,yyline,yytext());}
-{tabla} {return new Symbol(sym.TABLA,yyline,yyline,yytext());}
+{start} {return new Symbol(sym.START,yyline,yyline,yytext());}
+{end} {return new Symbol(sym.END,yyline,yyline,yytext());}
+
+{aField} {return new Symbol(sym.AFIELD,yyline,yyline,yytext());}
+{cField} {return new Symbol(sym.CFIELD,yyline,yyline,yytext());}
+
 {datos} {return new Symbol(sym.DATOS,yyline,yyline,yytext());}
+
 {registro} {return new Symbol(sym.REGISTRO,yyline,yyline,yytext());}
-{menor} {return new Symbol(sym.MENOR,yyline,yyline,yytext());}
-{mayor} {return new Symbol(sym.MAYOR,yyline,yyline,yytext());}
-{dospuntos} {return new Symbol(sym.DOSPUNTOS,yyline,yyline,yytext());}
-{barra} {return new Symbol(sym.BARRA,yyline,yyline,yytext());}
-{comillas} {return new Symbol(sym.COMILLAS,yyline,yyline,yytext());}
-{campo} {return new Symbol(sym.CAMPO,yyline,yyline,yytext());}
-{valor} {return new Symbol(sym.VALOR,yyline,yyline,yytext());}
-{numero} {return new Symbol(sym.NUMERO,yyline,yyline,yytext());}
-{of} {return new Symbol(sym.OF,yyline,yyline,yytext());}
-{campos} {return new Symbol(sym.CAMPOS,yyline,yyline,yytext());}
-{descripcion} {return new Symbol(sym.DESCRIPCION,yyline,yyline,yytext());}
+
+{aRegistro} {return new Symbol(sym.AREGISTRO,yyline,yyline,yytext());}
+{cRegistro} {return new Symbol(sym.CREGISTRO,yyline,yyline,yytext());}
+
+{abrirCampo} {return new Symbol(sym.ABRIRCAMPO,yyline,yyline,yytext());}
+{cerrarCampo} {return new Symbol(sym.CERRARCAMPO,yyline,yyline,yytext());}
+
+{abrirNombre} {return new Symbol(sym.ABRIRNOMBRE,yyline,yyline,yytext());}
+{abrirNumeroDeCampos} {return new Symbol(sym.ABRIRNUMERODECAMPOS,yyline,yyline,yytext());}
+{abrirTipo} {return new Symbol(sym.ABRIRTIPO,yyline,yyline,yytext());}
+{abrirNecesario} {return new Symbol(sym.ABRIRNECESARIO,yyline,yyline,yytext());}
+
+{abrirNombreTabla} {return new Symbol(sym.ABRIRNOMBRETABLA,yyline,yyline,yytext());}
 {basededatos} {return new Symbol(sym.BASEDEDATOS,yyline,yyline,yytext());}
-{suma} {return new Symbol(sym.SUMA,yyline,yyline,yytext());}
-{resta} {return new Symbol(sym.RESTA,yyline,yyline,yytext());}
+
+
+{abrirValor} {return new Symbol(sym.ABRIRVALOR,yyline,yyline,yytext());}
+{descripcion} {return new Symbol(sym.DESCRIPCION,yyline,yyline,yytext());}
+
 {necesario} {return new Symbol(sym.NECESARIO,yyline,yyline,yytext());}
 
-{_necesario} {return new Symbol(sym._NECESARIO,yyline,yyline,yytext());}
-{_tipo} {return new Symbol(sym._TIPO,yyline,yyline,yytext());}
-{_nombre} {return new Symbol(sym._NOMBRE,yyline,yyline,yytext());}
+{tabla} {return new Symbol(sym.TABLA,yyline,yyline,yytext());}
+
+{cerrar} {return new Symbol(sym.CERRAR,yyline,yyline,yytext());}
+
 
 {tipo} {return new Symbol(sym.TIPO,yyline,yyline,yytext());}
-{cadena} {return new Symbol(sym.CADENA,yyline,yyline,yytext());}
 {fecha} {return new Symbol(sym.FECHA,yyline,yyline,yytext());}
-{comaflotante} {return new Symbol(sym.COMAFLOTANTE,yyline,yyline,yytext());}
 {natural} {return new Symbol(sym.NATURAL,yyline,yyline,yytext());}
+{comaflotante} {return new Symbol(sym.COMAFLOTANTE,yyline,yyline,yytext());}
+{entero} {return new Symbol(sym.ENTERO,yyline,yyline,yytext());}
+{cadena} {return new Symbol(sym.CADENA,yyline,yyline,yytext());}
+
 {nombre} {
 			if(yytext().length() > 10) 
 			{
