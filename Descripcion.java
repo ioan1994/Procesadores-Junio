@@ -93,4 +93,48 @@ class Descripcion {
 			}
 		}
 
+
+		public void comprobarCampos(Stack descripcion, Stack registros, String opcion){
+			Registro r;
+			if(opcion.equals("nombre"))
+			{
+				while (!registros.empty()) {
+					r = (Registro)registros.pop();
+					if(!nombresIguales((Stack)descripcion.clone(),r.getCampos())){
+						System.out.print("Error semántico: los campos especificados ");
+						System.out.print("en el registro de la línea "+ r.getLinea());
+						System.out.println(" no coinciden con los descritos.");
+
+					}
+				}
+			}else if(opcion.equals("tipo")){
+				while (!registros.empty()) {
+					r = (Registro)registros.pop();
+					if(!tiposIguales((Stack)descripcion.clone(),r.getCampos())){
+						System.out.print("Error semántico: los campos especificados ");
+						System.out.print("en el registro de la línea "+ r.getLinea());
+						System.out.println(" no coinciden con los descritos.");
+
+					}
+				}
+			}
+		}
+
+
+		public Boolean tiposIguales(Stack descripcion, Stack campos) {
+			if(descripcion.empty() && campos.empty()) return true;
+			else if(!(descripcion.size() == campos.size())) return false;
+			else if(((Campo)descripcion.pop()).getTipo().equals(((Campo)campos.pop()).getTipo())) 
+					return nombresIguales(descripcion,campos);
+			else return false;
+		}
+
+
+		public Boolean nombresIguales(Stack descripcion, Stack campos) {
+			if(descripcion.empty() && campos.empty()) return true;
+			else if(!(descripcion.size() == campos.size())) return false;
+			else if(((Campo)descripcion.pop()).getNombre().equals(((Campo)campos.pop()).getNombre())) 
+					return nombresIguales(descripcion,campos);
+			else return false;
+		}
 }

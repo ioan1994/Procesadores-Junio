@@ -1,62 +1,68 @@
 <start database>
-
 	<start table>
 		<name: Persona>
 		<number of fields: 3>
 		<field description>
-			<name: RQW>
-			<type: date>
-		</field description>
-		<field description>
-			<name: AS>
+			<name: Campo-1>
+			<type: string>
 			<required: true>
-			<type: date>
-		</field description>
+		</field description >
 		<field description>
-			<name: AS>
+			<name: Campo-2>
+			<type: integer>
+			<required: false>
+		</field description >
+		<field description>
+			<name: Campo-3>
 			<type: date>
-		</field description>
+			<required: false>
+		</field description >
 	<end table>
-
 	<start data>
 		<start register>
-		<table name: Persona>
-			<field>
-				<name: Campo-1>
-				<value: +3>
-			</field>	
+			<table name: Persona>
+				<field>
+					<name: Campo-1>
+					<value: "Esto es un campo">
+				</field>
+				<field>
+					<name: Campo-2>
+					<value: 35>
+				</field>
+				<field>
+					<name: Campo-3>
+					<value: 24/03/2009>
+				</field>
 		<end register>
 		<start register>
-		<table name: Persona>
-			<field>
-				<name: Campo-1>
-				<value: +3>
-			</field>	
+			<table name: Persona>
+				<field>
+					<name: Campo-1>
+					<value: "Esto es un campo">
+				</field>
+				<field>
+					<name: Campo-2>
+					<value: 35>
+				</field>
+				<field>
+					<name: Campo-3>
+					<value: 24/03/2009>
+				</field>
 		<end register>
 		<start register>
-		<table name: Persona>
-			<field>
-				<name: Campo-1>
-				<value: +3>
-			</field>	
-		<end register>
-		<start register>
-		<table name: Persona>
-			<field>
-				<name: Campo-1>
-				<value: +3>
-			</field>	
-		<end register>
-		<start register>
-		<table name: Persosna>
-			<field>
-				<name: Campo-1>
-				<value: +3>
-			</field>	
-			<field>
-				<name: Campo-1>
-				<value: +3>
-			</field>	
+			<table name: Persona>
+				<field>
+					<name: Campo-1>
+					<value: "Esto es un campo">
+				</field>
+				<field>
+					<name: Campo-2>
+					<value: 35>
+				</field>
+				<field>
+					<name: Campo-3>
+					<value: 24/03/2009>
+				</field>
 		<end register>
 	<end data>
 <end database>

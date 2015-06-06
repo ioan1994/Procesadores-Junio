@@ -100,9 +100,8 @@ terminal int NATURAL, ENTERO;
 terminal Boolean NECESARIO;
 
 non terminal todo;
-non terminal Object valor;
 non terminal Stack  campos, datos, registros, descampos;
-non terminal Campo campo;
+non terminal Campo campo, valor;
 non terminal Integer numero_de_campos;
 non terminal Boolean necesario;
 non terminal String tipo, nombre;
@@ -110,14 +109,15 @@ non terminal Campo opcionalRegistro;
 non terminal Descripcion tabla;
 
 todo ::= START BASEDEDATOS CERRAR tabla:tab datos:dat END BASEDEDATOS CERRAR{:
-				tab.comprobarNombreTabla(tab.getNombreTabla(),dat);
+				tab.comprobarNombreTabla(tab.getNombreTabla(),(Stack)dat.clone());
+				tab.comprobarCampos(tab.getCampos(), dat);
 			:} | error;
 
 
 tabla ::= START TABLA CERRAR nombre:nom numero_de_campos:numdc descampos:campos END TABLA CERRAR {:
 				Descripcion descr = new Descripcion(nom, numdc, campos);
 				descr.comprobarNumeroDeCampos();
-				if(!descr.hayNecesarios(campos)){
+				if(!descr.hayNecesarios((Stack)campos.clone())){
 					System.out.println("Error semantico: Campo \"Required\" no encontrado\n");
 				}
 				RESULT = descr;
@@ -188,12 +188,12 @@ registros ::= registros:resto START:comienzo REGISTRO CERRAR ABRIRNOMBRETABLA NO
 					RESULT = stack;
 			:};
 
-campos ::= campos:resto ABRIRCAMPO campo:cabeza CERRARCAMPO {:
+campos ::= campos:resto ABRIRCAMPO:ap campo:cabeza CERRARCAMPO {:
 
 					if(Descripcion.valorDuplicado(cabeza,(Stack)resto.clone())){
 
 						System.out.print("Error semantico: el campo de la linea ");
-						System.out.print((cabezaright+1) + " no se puede declarar ");
+						System.out.print((apright+1) + " no se puede declarar ");
 						System.out.print("dos veces con el distinto valor\n");
 					}
 
@@ -205,21 +205,35 @@ campos ::= campos:resto ABRIRCAMPO campo:cabeza CERRARCAMPO {:
 					RESULT = stack;
 			:};
 
-campo ::= ABRIRNOMBRE NOMBRE:nom CERRAR ABRIRVALOR valor:val CERRAR {:
-			Campo c = new Campo();
-			c.setNombre(nom);
-			c.setValor(val);
-			RESULT = c;
+campo ::= ABRIRNOMBRE:ap NOMBRE:nom CERRAR ABRIRVALOR valor:val CERRAR {:
+			val.setLinea(apright+1);
+			val.setNombre(nom);
+			RESULT = val;
 		:};
 
 valor ::= COMAFLOTANTE:v {:
-				RESULT = v;
+				Campo c = new Campo();
+				c.setValor(v);
+				c.setTipo("float");
+				RESULT = c;
 		:} | NATURAL:v   {:
-				RESULT = v;
+				Campo c = new Campo();
+				c.setValor(v);
+				c.setTipo("int");
+				RESULT = c;
 		:} | ENTERO:v 	 {:
-				RESULT = v;
+				Campo c = new Campo();
+				c.setValor(v);
+				c.setTipo("int");
+				RESULT = c;
 		:} | CADENA:v 	 {:
-				RESULT = v;
+				Campo c = new Campo();
+				c.setValor(v);
+				c.setTipo("string");
+				RESULT = c;
 		:} | FECHA:v 	 {:	
-				RESULT = v;
+				Campo c = new Campo();
+				c.setValor(v);
+				c.setTipo("date");
+				RESULT = c;
 		:};
