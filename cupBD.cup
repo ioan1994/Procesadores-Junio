@@ -12,6 +12,24 @@ import java_cup.*;
 parser code {:
 
 
+
+		public Boolean hayCamposRepetidos(Stack campos){
+			if(campos.empty()) return false;
+				else if (buscarNombre(((Campo)campos.pop()).getNombre(), (Stack)campos.clone())) return true;
+					else return hayCamposRepetidos(campos);
+		}
+
+		public Boolean buscarNombre(String nombre, Stack campos){
+			if(campos.empty()) return false;
+			else if(((Campo)campos.pop()).getNombre().equals(nombre)) {return true;}
+				else return buscarNombre(nombre,campos);
+		}
+
+		public Boolean hayNecesarios(Stack campos){
+			if(campos.empty()) return false;
+			else if (((Campo)campos.pop()).getNecesario()) return true;
+				else return hayNecesarios(campos);
+		}
 	//método main para analizar 
 	public static void main (String argv[]) throws Exception
 	{
@@ -92,19 +110,26 @@ non terminal Campo opcionalRegistro;
 non terminal Descripcion tabla;
 
 todo ::= START BASEDEDATOS CERRAR tabla:tab datos:dat END BASEDEDATOS CERRAR{:
-				System.out.println(tab.getNombreTabla());
+				tab.comprobarNombreTabla(tab.getNombreTabla(),dat);
 			:} | error;
 
 
 tabla ::= START TABLA CERRAR nombre:nom numero_de_campos:numdc descampos:campos END TABLA CERRAR {:
 				Descripcion descr = new Descripcion(nom, numdc, campos);
 				descr.comprobarNumeroDeCampos();
+				if(!descr.hayNecesarios(campos)){
+					System.out.println("Error semantico: Campo \"Required\" no encontrado\n");
+				}
 				RESULT = descr;
 			:};
 
 
 descampos ::= descampos:resto AFIELD DESCRIPCION CERRAR nombre:nom opcionalRegistro:op CFIELD DESCRIPCION CERRAR {:
 				op.setNombre(nom);
+				if(Descripcion.buscarNombre(nom,(Stack)resto.clone())) {
+					System.out.print("Error semantico: Existen campos repetidos. El campo \""+ nom);
+					System.out.print("\" en la linea "+ nomright + " esta repetido\n");
+				}
 				resto.push(op);
 				RESULT = resto;
 			:} | AFIELD DESCRIPCION CERRAR nombre:nom opcionalRegistro:op CFIELD DESCRIPCION CERRAR{:
@@ -152,17 +177,26 @@ datos ::=| START DATOS CERRAR registros:reg END DATOS CERRAR {:
 					RESULT = reg;
 			:};
 
-registros ::= registros:resto START REGISTRO CERRAR ABRIRNOMBRETABLA NOMBRE CERRAR campos:cabeza END REGISTRO CERRAR {:
-					resto.push(cabeza);
+registros ::= registros:resto START:comienzo REGISTRO CERRAR ABRIRNOMBRETABLA NOMBRE:nom CERRAR campos:c END REGISTRO CERRAR {:
+					Registro r = new Registro(nom,c,comienzoright+1);
+					resto.push(r);
 					RESULT = resto;
-			:}| START REGISTRO CERRAR ABRIRNOMBRETABLA NOMBRE:nom CERRAR campos:c END REGISTRO CERRAR {:
+			:}| START:comienzo REGISTRO CERRAR ABRIRNOMBRETABLA NOMBRE:nom CERRAR campos:c END REGISTRO CERRAR {:
 					Stack<Registro> stack = new Stack <Registro>();
-					Registro r = new Registro(nom,c);
+					Registro r = new Registro(nom,c,comienzoright+1);
 					stack.push(r);
 					RESULT = stack;
 			:};
 
 campos ::= campos:resto ABRIRCAMPO campo:cabeza CERRARCAMPO {:
+
+					if(Descripcion.valorDuplicado(cabeza,(Stack)resto.clone())){
+
+						System.out.print("Error semantico: el campo de la linea ");
+						System.out.print((cabezaright+1) + " no se puede declarar ");
+						System.out.print("dos veces con el distinto valor\n");
+					}
+
 					resto.push(cabeza);
 					RESULT = resto;
 			:}| ABRIRCAMPO campo:c CERRARCAMPO   {:

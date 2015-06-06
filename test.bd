@@ -2,17 +2,18 @@
 
 	<start table>
 		<name: Persona>
-		<number of fields: 1>
+		<number of fields: 3>
 		<field description>
-			<name: Camasdasdasdpo-1>
+			<name: RQW>
 			<type: date>
 		</field description>
 		<field description>
-			<name: Camasdasdasdpo-1>
+			<name: AS>
+			<required: true>
 			<type: date>
 		</field description>
 		<field description>
-			<name: Camasdasdasdpo-1>
+			<name: AS>
 			<type: date>
 		</field description>
 	<end table>
@@ -20,6 +21,38 @@
 	<start data>
 		<start register>
 		<table name: Persona>
+			<field>
+				<name: Campo-1>
+				<value: +3>
+			</field>	
+		<end register>
+		<start register>
+		<table name: Persona>
+			<field>
+				<name: Campo-1>
+				<value: +3>
+			</field>	
+		<end register>
+		<start register>
+		<table name: Persona>
+			<field>
+				<name: Campo-1>
+				<value: +3>
+			</field>	
+		<end register>
+		<start register>
+		<table name: Persona>
+			<field>
+				<name: Campo-1>
+				<value: +3>
+			</field>	
+		<end register>
+		<start register>
+		<table name: Persosna>
+			<field>
+				<name: Campo-1>
+				<value: +3>
+			</field>	
 			<field>
 				<name: Campo-1>
 				<value: +3>

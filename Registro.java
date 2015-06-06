@@ -9,11 +9,24 @@ import java.util.*;
 
  		private String nombreTabla;
  		private Stack campos;
+ 		private int linea;
 		
-		public Registro(String nombreTabla, Stack campos){
+		public Registro(String nombreTabla, Stack campos, int linea){
 			this.nombreTabla = nombreTabla;
 			this.campos = campos;
+			this.linea = linea;
 		}
+
+
+
+		public int getLinea() {
+			return linea;
+		}
+
+		public void setLinea(int linea) {
+			this.linea = linea;
+		}
+
 
 		public String getNombreTabla() {
 			return nombreTabla;

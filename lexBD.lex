@@ -113,7 +113,14 @@ abrirNombreTabla="<table name:"
 {abrirValor} {return new Symbol(sym.ABRIRVALOR,yyline,yyline,yytext());}
 {descripcion} {return new Symbol(sym.DESCRIPCION,yyline,yyline,yytext());}
 
-{necesario} {return new Symbol(sym.NECESARIO,yyline,yyline,yytext());}
+{necesario} {
+			if(yytext().equals("true")){
+				return new Symbol(sym.NECESARIO,yyline,yyline,true);
+			}else{
+
+				return new Symbol(sym.NECESARIO,yyline,yyline,false);
+			}
+		}
 
 {tabla} {return new Symbol(sym.TABLA,yyline,yyline,yytext());}
 

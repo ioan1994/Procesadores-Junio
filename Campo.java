@@ -11,8 +11,18 @@ import java.util.*;
 		private String tipo;
 		private Boolean necesario;
 		private Object valor;
+		private int linea;
 		
 		public Campo(){	}
+
+		public int getLinea() {
+			return linea;
+		}
+
+		public void setLinea(int linea) {
+			this.linea = linea;
+		}
+
 
 		public Object getValor() {
 			return valor;
@@ -23,7 +33,7 @@ import java.util.*;
 		}
 
 		public Boolean getNecesario() {
-			return necesario;
+			return this.necesario;
 		}
 
 		public void setNecesario(Boolean necesario) {
