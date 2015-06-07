@@ -22,22 +22,7 @@
 		<start register>
 			<table name: Persona>
 				<field>
-					<name: Camspo-1>
-					<value: "Esto es un campo">
-				</field>
-				<field>
-					<name: Campo-2>
-					<value: "35">
-				</field>
-				<field>
-					<name: Campo-3>
-					<value: 24/03/2009>
-				</field>
-		<end register>
-		<start register>
-			<table name: Persona>
-				<field>
-					<name: Campso-1>
+					<name: Campo-1>
 					<value: "Esto es un campo">
 				</field>
 				<field>
@@ -46,7 +31,7 @@
 				</field>
 				<field>
 					<name: Campo-3>
-					<value: 24/03/2009>
+					<value: 24/03/20>
 				</field>
 		<end register>
 		<start register>
@@ -61,7 +46,22 @@
 				</field>
 				<field>
 					<name: Campo-3>
-					<value: 24/03/2009>
+					<value: 24/03/20>
+				</field>
+		<end register>
+		<start register>
+			<table name: Persona>
+				<field>
+					<name: Campo-1>
+					<value: "Esto es un campo">
+				</field>
+				<field>
+					<name: Campo-2>
+					<value: 35>
+				</field>
+				<field>
+					<name: Campo-3>
+					<value: 24/03/20>
 				</field>
 		<end register>
 	<end data>

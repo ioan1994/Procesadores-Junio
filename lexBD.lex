@@ -45,7 +45,7 @@ comaflotante={entero}[.]{natural}
 entero=[-+]?{natural}
 natural=[0-9]+
 cadena={comillas}[^\n\"]+{comillas}
-fecha={natural}{natural}/{natural}{natural}/{natural}{natural}
+fecha=[0-3][0-9]/[0-1][0-9]/[0-9][0-9]
 
 
 start="<start"

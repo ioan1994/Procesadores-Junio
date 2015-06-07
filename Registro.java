@@ -17,6 +17,11 @@ import java.util.*;
 			this.linea = linea;
 		}
 
+		public Registro(){
+
+		}
+
+
 
 
 		public int getLinea() {

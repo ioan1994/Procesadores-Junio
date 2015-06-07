@@ -11,25 +11,6 @@ import java_cup.*;
 
 parser code {:
 
-
-
-		public Boolean hayCamposRepetidos(Stack campos){
-			if(campos.empty()) return false;
-				else if (buscarNombre(((Campo)campos.pop()).getNombre(), (Stack)campos.clone())) return true;
-					else return hayCamposRepetidos(campos);
-		}
-
-		public Boolean buscarNombre(String nombre, Stack campos){
-			if(campos.empty()) return false;
-			else if(((Campo)campos.pop()).getNombre().equals(nombre)) {return true;}
-				else return buscarNombre(nombre,campos);
-		}
-
-		public Boolean hayNecesarios(Stack campos){
-			if(campos.empty()) return false;
-			else if (((Campo)campos.pop()).getNecesario()) return true;
-				else return hayNecesarios(campos);
-		}
 	//método main para analizar 
 	public static void main (String argv[]) throws Exception
 	{
@@ -110,6 +91,7 @@ non terminal Descripcion tabla;
 
 todo ::= START BASEDEDATOS CERRAR tabla:tab datos:dat END BASEDEDATOS CERRAR{:
 				tab.comprobarNombreTabla(tab.getNombreTabla(),(Stack)dat.clone());
+				tab.comprobarCampos((Stack)tab.getCampos().clone(), (Stack)dat.clone(), "necesario");
 				tab.comprobarCampos((Stack)tab.getCampos().clone(), (Stack)dat.clone(), "tipo");
 				tab.comprobarCampos((Stack)tab.getCampos().clone(), (Stack)dat.clone(), "nombre");
 			:} | error;
@@ -207,9 +189,16 @@ campos ::= campos:resto ABRIRCAMPO:ap campo:cabeza CERRARCAMPO {:
 			:};
 
 campo ::= ABRIRNOMBRE:ap NOMBRE:nom CERRAR ABRIRVALOR valor:val CERRAR {:
-			val.setLinea(apright+1);
-			val.setNombre(nom);
-			RESULT = val;
+				val.setLinea(apright+1);
+				val.setNombre(nom);
+				RESULT = val;
+		:} | ABRIRNOMBRE:ap NOMBRE:nom CERRAR {:
+				Campo c = new Campo();
+				c.setValor("none");
+				c.setTipo("none");
+				c.setLinea(apright+1);
+				c.setNombre(nom);
+				RESULT = c;
 		:};
 
 valor ::= COMAFLOTANTE:v {:
