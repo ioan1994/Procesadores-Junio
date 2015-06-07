@@ -110,7 +110,8 @@ non terminal Descripcion tabla;
 
 todo ::= START BASEDEDATOS CERRAR tabla:tab datos:dat END BASEDEDATOS CERRAR{:
 				tab.comprobarNombreTabla(tab.getNombreTabla(),(Stack)dat.clone());
-				tab.comprobarCampos(tab.getCampos(), dat);
+				tab.comprobarCampos((Stack)tab.getCampos().clone(), (Stack)dat.clone(), "tipo");
+				tab.comprobarCampos((Stack)tab.getCampos().clone(), (Stack)dat.clone(), "nombre");
 			:} | error;
 
 
@@ -219,12 +220,12 @@ valor ::= COMAFLOTANTE:v {:
 		:} | NATURAL:v   {:
 				Campo c = new Campo();
 				c.setValor(v);
-				c.setTipo("int");
+				c.setTipo("integer");
 				RESULT = c;
 		:} | ENTERO:v 	 {:
 				Campo c = new Campo();
 				c.setValor(v);
-				c.setTipo("int");
+				c.setTipo("integer");
 				RESULT = c;
 		:} | CADENA:v 	 {:
 				Campo c = new Campo();

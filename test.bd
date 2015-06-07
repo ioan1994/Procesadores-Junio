@@ -22,12 +22,12 @@
 		<start register>
 			<table name: Persona>
 				<field>
-					<name: Campo-1>
+					<name: Camspo-1>
 					<value: "Esto es un campo">
 				</field>
 				<field>
 					<name: Campo-2>
-					<value: 35>
+					<value: "35">
 				</field>
 				<field>
 					<name: Campo-3>
@@ -37,7 +37,7 @@
 		<start register>
 			<table name: Persona>
 				<field>
-					<name: Campo-1>
+					<name: Campso-1>
 					<value: "Esto es un campo">
 				</field>
 				<field>

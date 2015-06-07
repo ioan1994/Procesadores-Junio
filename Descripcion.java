@@ -101,7 +101,7 @@ class Descripcion {
 				while (!registros.empty()) {
 					r = (Registro)registros.pop();
 					if(!nombresIguales((Stack)descripcion.clone(),r.getCampos())){
-						System.out.print("Error semántico: los campos especificados ");
+						System.out.print("Error semántico: el nombre de los campos especificados ");
 						System.out.print("en el registro de la línea "+ r.getLinea());
 						System.out.println(" no coinciden con los descritos.");
 
@@ -110,8 +110,8 @@ class Descripcion {
 			}else if(opcion.equals("tipo")){
 				while (!registros.empty()) {
 					r = (Registro)registros.pop();
-					if(!tiposIguales((Stack)descripcion.clone(),r.getCampos())){
-						System.out.print("Error semántico: los campos especificados ");
+					if(!tiposIguales((Stack)descripcion.clone(),(Stack)r.getCampos().clone())){
+						System.out.print("Error semántico: el tipo de los campos especificados ");
 						System.out.print("en el registro de la línea "+ r.getLinea());
 						System.out.println(" no coinciden con los descritos.");
 
@@ -125,7 +125,7 @@ class Descripcion {
 			if(descripcion.empty() && campos.empty()) return true;
 			else if(!(descripcion.size() == campos.size())) return false;
 			else if(((Campo)descripcion.pop()).getTipo().equals(((Campo)campos.pop()).getTipo())) 
-					return nombresIguales(descripcion,campos);
+					return tiposIguales(descripcion,campos);
 			else return false;
 		}
 
